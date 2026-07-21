@@ -47,9 +47,9 @@ RUN mkdir devi &&\
 RUN git clone https://github.com/romkatv/powerlevel10k
 RUN /home/kasm-user/.local/bin/mise install go@latest
 RUN /home/kasm-user/devi/fzf/install --all
-COPY ./.p10k.zsh /home/kasm-user/.p10k.zsh
 RUN cp /home/kasm-user/scripts/.dir_colors /home/kasm-user/.dir_colors
 RUN cp /home/kasm-user/minimalrc/.zshrc /home/kasm-user/.zshrc
+RUN cp /home/kasm-user/minimalrc/.p10k.zsh /home/kasm-user/.p10k.zsh
 RUN cp /home/kasm-user/minimalrc/.tmux.conf /home/kasm-user/.tmux.conf
 RUN cp /home/kasm-user/scripts/.inputrc /home/kasm-user/.inputrc
 RUN cp /home/kasm-user/minimalrc/.vimrc /home/kasm-user/.vimrc
