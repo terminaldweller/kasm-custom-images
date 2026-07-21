@@ -1,5 +1,5 @@
-ARG BASE_TAG="develop"
-ARG BASE_IMAGE="core-debian-trixie"
+ARG BASE_TAG="1.17.0"
+ARG BASE_IMAGE="core-debian-bookworm"
 FROM kasmweb/$BASE_IMAGE:$BASE_TAG
 
 USER root

@@ -30,12 +30,8 @@ fi
 
 rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
 
-if [[ "${DISTRO}" == @(oracle8|rockylinux9|rockylinux8|oracle9|rhel9|almalinux9|almalinux8|fedora42|fedora43) ]]; then
-  if [[ "${DISTRO}" == @(fedora42|fedora43) ]]; then
-    dnf config-manager addrepo --from-repofile=https://download.sublimetext.com/rpm/stable/$(arch)/sublime-text.repo
-  else
-    dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/$(arch)/sublime-text.repo
-  fi
+if [[ "${DISTRO}" == @(oracle8|rockylinux9|rockylinux8|oracle9|rhel9|almalinux9|almalinux8|fedora39|fedora40) ]]; then
+  dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/$(arch)/sublime-text.repo
   # Remove the gpgkey line from repo file since we manually imported the key
   sed -i '/^gpgkey=/d' /etc/yum.repos.d/sublime-text.repo
   dnf install -y sublime-text
