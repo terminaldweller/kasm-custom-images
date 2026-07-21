@@ -53,3 +53,5 @@ RUN cp /home/kasm-user/minimalrc/.p10k.zsh /home/kasm-user/.p10k.zsh
 RUN cp /home/kasm-user/minimalrc/.tmux.conf /home/kasm-user/.tmux.conf
 RUN cp /home/kasm-user/scripts/.inputrc /home/kasm-user/.inputrc
 RUN cp /home/kasm-user/minimalrc/.vimrc /home/kasm-user/.vimrc
+
+CMD ["--tail-log"]
