@@ -1,0 +1,42 @@
+services:
+  xray:
+    image: ghcr.io/xtls/xray-core:latest
+    pid_limit: 512
+    cpu_share: 512
+    mem_limit: 256m
+    mem_reservation: 128m
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges
+    read_only: true
+    networks:
+      xraynet:
+        ipv4_address: 177.44.0.66
+    restart: unless-stopped
+    ports:
+      - 443:443/tcp
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    volumes:
+      - ./config.json:/usr/local/etc/xray/config.json:ro
+    command: ["run", "-config", "/usr/local/etc/xray/config.json"]
+    cap_drop:
+      - ALL
+    dns:
+      - 192.168.1.1
+      - 192.168.1.83
+      - 192.168.1.88
+      - 192.168.1.114
+networks:
+  xraynet:
+    enable_ipv6: true
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+    ipam:
+      config:
+        - subnet: 177.44.0.0/24
