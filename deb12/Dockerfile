@@ -31,11 +31,13 @@ RUN \
   chown -R 1000:0 /home/kasm-user && \
   rm -Rf ${INST_DIR}
 
-RUN apt update && apt install -y build-essential gdb clang vim-nox tmux curl wget git ripgrep fd-find bind9-dnsutils socat zsh zsh-syntax-highlighting zsh-autosuggestions autoconf cmake meson ninja-build irssi profanity eza lf bat python3-pip pipx
+RUN apt update && apt install -y build-essential gdb clang vim-nox tmux curl wget git ripgrep fd-find bind9-dnsutils socat zsh zsh-syntax-highlighting zsh-autosuggestions autoconf cmake meson ninja-build irssi profanity lf bat python3-pip pipx
+
+RUN rm -rf /home/kasm-default-profile/.cache
 
 USER 1000
-WORKDIR /home/kasm-user
-ENV HOME=/home/kasm-user
+WORKDIR /home/kasm-default-profile
+ENV HOME=/home/kasm-default-profile
 
 RUN curl https://mise.run | sh
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -45,13 +47,13 @@ RUN mkdir devi &&\
       git clone https://github.com/junegunn/fzf &&\
       git clone https://github.com/junegunn/fzf-git.sh
 RUN git clone https://github.com/romkatv/powerlevel10k
-RUN /home/kasm-user/.local/bin/mise install go@latest
-RUN /home/kasm-user/devi/fzf/install --all
-RUN cp /home/kasm-user/scripts/.dir_colors /home/kasm-user/.dir_colors
-RUN cp /home/kasm-user/minimalrc/.zshrc /home/kasm-user/.zshrc
-RUN cp /home/kasm-user/minimalrc/.p10k.zsh /home/kasm-user/.p10k.zsh
-RUN cp /home/kasm-user/minimalrc/.tmux.conf /home/kasm-user/.tmux.conf
-RUN cp /home/kasm-user/scripts/.inputrc /home/kasm-user/.inputrc
-RUN cp /home/kasm-user/minimalrc/.vimrc /home/kasm-user/.vimrc
+# RUN /home/kasm-default-profile/.local/bin/mise install go@latest
+# RUN /home/kasm-default-profile/devi/fzf/install --all --no-bash  --no-fish --no-nushell
+RUN cp /home/kasm-default-profile/scripts/.dir_colors /home/kasm-default-profile/.dir_colors
+RUN cp /home/kasm-default-profile/minimalrc/.zshrc /home/kasm-default-profile/.zshrc
+RUN cp /home/kasm-default-profile/minimalrc/.p10k.zsh /home/kasm-default-profile/.p10k.zsh
+RUN cp /home/kasm-default-profile/minimalrc/.tmux.conf /home/kasm-default-profile/.tmux.conf
+RUN cp /home/kasm-default-profile/scripts/.inputrc /home/kasm-default-profile/.inputrc
+RUN cp /home/kasm-default-profile/minimalrc/.vimrc /home/kasm-default-profile/.vimrc
 
 CMD ["--tail-log"]
