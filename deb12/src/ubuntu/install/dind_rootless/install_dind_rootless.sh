@@ -20,8 +20,8 @@ apt-get install -y \
     fuse-overlayfs \
     iptables \
     kmod \
-    openssh-client \
     slirp4netns \
+    openssh-client \
     sudo \
     supervisor \
     uidmap \
