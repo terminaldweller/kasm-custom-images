@@ -1,4 +1,4 @@
-ARG XRAY_IMAGE=ghcr.io/xtls/xray-core:26.3.23
+ARG XRAY_IMAGE=ghcr.io/xtls/xray-core:26.7.11
 
 FROM ${XRAY_IMAGE} AS upstream
 
