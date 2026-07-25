@@ -1,0 +1,40 @@
+services:
+  client:
+    image: alpine:3.24
+    restart: unless-stopped
+    networks:
+      tornet:
+        ipv4_address: 172.50.0.10
+    entrypoint: ["/bin/client-entrypoint.sh"]
+    volumes:
+      - ./client-entrypoint.sh:/bin/client-entrypoint.sh:ro
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_ADMIN
+  gateway:
+    image: alpine:3.24
+    restart: unless-stopped
+    networks:
+      tornet:
+        ipv4_address: 172.50.0.15
+    volumes:
+      - ./tor-entrypoint.sh:/bin/tor-entrypoint.sh:ro
+      - ./torrc:/etc/tor/torrc:ro
+    entrypoint: ["/bin/tor-entrypoint.sh"]
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_ADMIN
+    read_only: true
+    security_opt:
+      - no-new-privileges
+networks:
+  tornet:
+    enable_ipv6: false
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.50.0.0/24
