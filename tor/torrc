@@ -1,0 +1,9 @@
+SocksPort 172.50.0.15:9050
+
+TransPort 172.50.0.15:9040
+DNSPort 172.50.0.15:5353
+
+AutomapHostsOnResolve 1
+VirtualAddrNetworkIPv4 10.192.0.0/10
+
+Log notice stdout

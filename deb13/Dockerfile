@@ -1,4 +1,4 @@
-ARG BASE_TAG="1.19.0"
+ARG BASE_TAG="1.19.0-rolling-daily"
 ARG BASE_IMAGE="core-debian-trixie"
 FROM kasmweb/$BASE_IMAGE:$BASE_TAG
 
