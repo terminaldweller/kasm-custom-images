@@ -15,13 +15,13 @@ nft add rule ip tor prerouting \
   ip daddr != 172.50.0.0/24 \
   meta l4proto tcp \
   counter \
-  redirect to :9040
+  dnat to 172.50.0.15:9040
 
 nft add rule ip tor prerouting \
   ip saddr 172.50.0.0/24 \
   udp dport 53 \
   counter \
-  redirect to :5353
+  dnat to 172.50.0.15:5353
 
 nft add table ip filter
 nft 'add chain ip filter forward {
