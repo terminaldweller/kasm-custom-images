@@ -10,7 +10,6 @@ ROUTE_TABLE="${XRAY_ROUTE_TABLE:-1001}"
 
 echo "Starting Xray..."
 
-# Preserve the arguments supplied by CMD or Docker Compose.
 /usr/local/bin/xray "$@" &
 XRAY_PID=$!
 
@@ -45,44 +44,72 @@ done
 
 echo "Configuring routing through ${TUN_IF}..."
 
+# Make sure Docker actually assigned the address we expect.
+if ! ip -o -4 addr show dev "$UPLINK_IF" |
+    awk '{print $4}' |
+    cut -d/ -f1 |
+    grep -Fxq "$LAN_IP"
+then
+    echo "ERROR: ${LAN_IP} is not assigned to ${UPLINK_IF}" >&2
+    echo "Addresses on ${UPLINK_IF}:" >&2
+    ip -4 addr show dev "$UPLINK_IF" >&2
+    stop_xray
+    exit 1
+fi
+
 sysctl -qw net.ipv4.ip_forward=1
 sysctl -qw net.ipv4.conf.all.rp_filter=0
 sysctl -qw net.ipv4.conf.default.rp_filter=0
 sysctl -qw "net.ipv4.conf.${UPLINK_IF}.rp_filter=0"
 sysctl -qw "net.ipv4.conf.${TUN_IF}.rp_filter=0"
 
-# Downstream containers must remain reachable through the Docker bridge.
+#
+# Routing table 1001
+#
+
+# Keep the Docker/downstream subnet reachable through the normal uplink.
+#
+# Do NOT specify "src $LAN_IP" here. The kernel can choose the locally
+# assigned source address itself, and forcing prefsrc was causing:
+#
+#     Error: Invalid prefsrc address.
+#
 ip route replace \
     "$LAN_SUBNET" \
     dev "$UPLINK_IF" \
-    src "$LAN_IP" \
     table "$ROUTE_TABLE"
 
-# Send downstream traffic into Xray's TUN interface.
+# Everything else using table 1001 goes through Xray.
 ip route replace \
     default \
     dev "$TUN_IF" \
     table "$ROUTE_TABLE"
 
-# Remove stale copies if Docker restarted only the process while preserving
-# the network namespace.
+#
+# Policy rules
+#
+
+# Remove stale rules if this script is run again in the same namespace.
 while ip rule del pref 100 2>/dev/null; do :; done
 while ip rule del pref 200 2>/dev/null; do :; done
 
-# Keep Xray's own REALITY connection on the ordinary Docker default route.
+# Xray's own outbound REALITY connection MUST use Docker's normal
+# routing table, otherwise Xray would recursively route itself into xray0.
 ip rule add \
     pref 100 \
     from "${LAN_IP}/32" \
     lookup main
 
-# Route traffic originating from Kasm/downstream containers into xray0.
+# Traffic originating from downstream/Kasm containers goes through Xray.
 ip rule add \
     pref 200 \
     from "$LAN_SUBNET" \
     lookup "$ROUTE_TABLE"
 
 echo "Policy routing configured:"
+echo
 ip rule show
+echo
 ip route show table "$ROUTE_TABLE"
 
 wait "$XRAY_PID"
