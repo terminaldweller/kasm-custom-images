@@ -1,0 +1,17 @@
+services:
+  i2pgateway:
+    image: purplei2p/i2pd:latest
+    restart: unless-stopped
+    networks:
+      i2pdnet:
+        ipv4_address: 172.60.0.15
+    volumes:
+      - ./i2pd.conf:/var/lib/i2pd/i2pd.conf:ro
+    command: ["-conf", "/var/lib/i2pd/i2pd.conf"]
+networks:
+  i2pdnet:
+    enable_ipv6: false
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.60.0.0/24
