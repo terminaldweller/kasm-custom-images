@@ -1,4 +1,4 @@
-SocksPort 172.16.50.15:9050
+SocksPort 172.16.50.15:9050 ExtendedErrors
 
 TransPort 172.16.50.15:9040
 DNSPort 172.16.50.15:5353
