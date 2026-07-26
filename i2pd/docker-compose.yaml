@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     networks:
       i2pdnet:
-        ipv4_address: 172.60.0.15
+        ipv4_address: 172.16.60.15
     volumes:
       - ./i2pd.conf:/var/lib/i2pd/i2pd.conf:ro
     command: ["-conf", "/var/lib/i2pd/i2pd.conf"]
@@ -14,4 +14,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.60.0.0/24
+        - subnet: 172.16.60.0/24
