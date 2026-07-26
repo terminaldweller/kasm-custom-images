@@ -14,7 +14,7 @@ services:
     read_only: true
     networks:
       xraynet:
-        ipv4_address: 177.44.0.66
+        ipv4_address: 172.16.70.66
     restart: unless-stopped
     tmpfs:
       - /tmp:rw,noexec,nosuid,size=16m
@@ -39,4 +39,4 @@ networks:
       com.docker.network.bridge.enable_icc: "true"
     ipam:
       config:
-        - subnet: 177.44.0.0/24
+        - subnet: 172.16.70.0/24
