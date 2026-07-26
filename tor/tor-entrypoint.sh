@@ -26,6 +26,12 @@ nft add rule ip tor prerouting \
   counter \
   dnat to 172.50.0.15:5353
 
+nft add rule ip tor prerouting \
+  ip saddr 172.50.0.0/24 \
+  tcp dport 53 \
+  counter \
+  dnat to 172.50.0.15:5353
+
 nft add table ip filter
 nft 'add chain ip filter forward {
   type filter hook forward priority filter;
