@@ -14,23 +14,23 @@ nft 'add chain ip tor prerouting {
 }'
 
 nft add rule ip tor prerouting \
-  ip saddr 172.50.0.0/24 \
+  ip saddr 172.16.50.0/24 \
   udp dport 53 \
   counter \
-  dnat to 172.50.0.15:5353
+  dnat to 172.16.50.15:5353
 
 nft add rule ip tor prerouting \
-  ip saddr 172.50.0.0/24 \
+  ip saddr 172.16.50.0/24 \
   tcp dport 53 \
   counter \
-  dnat to 172.50.0.15:5353
+  dnat to 172.16.50.15:5353
 
 nft add rule ip tor prerouting \
-  ip saddr 172.50.0.0/24 \
-  ip daddr != 172.50.0.0/24 \
+  ip saddr 172.16.50.0/24 \
+  ip daddr != 172.16.50.0/24 \
   meta l4proto tcp \
   counter \
-  dnat to 172.50.0.15:9040
+  dnat to 172.16.50.15:9040
 
 nft add table ip filter
 nft 'add chain ip filter forward {
@@ -39,7 +39,7 @@ nft 'add chain ip filter forward {
 }'
 
 nft add rule ip filter forward \
-  ip saddr 172.50.0.0/24 \
+  ip saddr 172.16.50.0/24 \
   reject
 
 tor -f /etc/tor/torrc

@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     networks:
       torgatewaynet:
-        ipv4_address: 172.50.0.15
+        ipv4_address: 172.16.50.15
     volumes:
       - ./tor-entrypoint.sh:/bin/tor-entrypoint.sh:ro
       - ./torrc:/etc/tor/torrc:ro
@@ -31,4 +31,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.50.0.0/24
+        - subnet: 172.16.50.0/24
